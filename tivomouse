@@ -1,0 +1,35 @@
+#!/bin/bash
+
+init_delay=10          # The starting delay time.
+max_delay=$((60*10))   # The maximum amount of time to delay beteween checking for a live stream
+delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream
+
+ekko () {
+  echo "[$(date)] - ${1}"
+}
+
+while :; do
+
+  ekko "Attempting to download Ironmouse's live stream... Press Ctrl+C to quit."
+  ekko "sleeping for ${delay} seconds"
+  sleep "${delay}"
+
+  # Attempt to download the live stream.
+  # We exec the parameters sent to this script
+  # @TODO make this a modular script by executing the argv "${2}"
+  youtube-dl -f best https://twitch.tv/ironmouse
+
+  # Reset the delay time if youtube-dl exited with 0 error code
+  # This would suggest that the streamer ended their stream.
+  # This is done in case of temporary loss of stream
+  # We want youtube-dl to resume quickly afterwards to catch the stream as it continues
+  if [[ $? -eq 0 ]]; then let delay=init_delay; fi
+
+  # Slowly increase the delay time.
+  # This is done to be polite to twitch.
+  # We wait longer and longer between tries, eventually maxing out at ${max_delay} seconds
+  if [[ delay -ge max_delay ]]; then let delay=max_delay
+  else let delay=delay*2
+  fi
+
+done
