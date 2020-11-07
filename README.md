@@ -6,6 +6,7 @@ A bash script to help you record a live stream. Great for the times when you jus
 
   * bash
   * jq
+  * youtube-dl
 
 ## Setup
 
