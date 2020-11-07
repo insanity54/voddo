@@ -10,7 +10,7 @@ delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no li
 ## VARIABLES
 bindir="$(dirname "$(readlink -fm "$0")")"
 name="${1}"
-url="$(cat ${bindir}/ref.json | jq --arg name "${name}" '.[] | select(.name==$name).url' | tr -d \")" # get the url from ref.json
+url="$(cat ${bindir}/voddo.json | jq --arg name "${name}" '.[] | select(.name==$name).url' | tr -d \")" # get the url from ref.json
 
 
 ## FUNCTIONS
