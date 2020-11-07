@@ -53,7 +53,7 @@ main () {
       else let delay=delay*2
     fi
 
-    ekko "sleeping for ${delay} seconds"
+    ekko "Retrying in ${delay} seconds..."
     sleep "${delay}"
 
   done
