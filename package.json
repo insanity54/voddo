@@ -1,0 +1,24 @@
+{
+  "name": "voddo",
+  "version": "0.0.1",
+  "description": "Persistent Stream Downloader using youtube-dl",
+  "main": "voddo.sh",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/insanity54/voddo.git"
+  },
+  "keywords": [
+    "youtube-dl"
+  ],
+  "author": "Chris Grimmett <chris@grimtech.net>",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://gitlab.com/insanity54/voddo/issues"
+  },
+  "homepage": "https://gitlab.com/insanity54/voddo#readme",
+  "dependencies": {
+  }
+}
