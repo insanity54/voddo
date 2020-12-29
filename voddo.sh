@@ -1,13 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
 ## CONFIG
 init_delay=10          # The starting retry delay (in seconds.)
 max_delay=$((60*10))   # The maximum amount of time to delay beteween checking for a live stream.
 delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream.
-datadir="/var/local/futureporn"
+datadir="~/.local/futureporn"
 
 ## VARIABLES
-bindir="$(dirname "$(readlink -fm "$0")")"
 url="${1}"
 
 ## FUNCTIONS
