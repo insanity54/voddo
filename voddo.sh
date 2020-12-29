@@ -4,7 +4,7 @@
 init_delay=10          # The starting retry delay (in seconds.)
 max_delay=$((60*10))   # The maximum amount of time to delay beteween checking for a live stream.
 delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream.
-
+datadir="/var/local/futureporn"
 
 ## VARIABLES
 bindir="$(dirname "$(readlink -fm "$0")")"
@@ -16,6 +16,10 @@ ekko () {
 }
 
 init () {
+  if [ ! -d "${datadir}" ]; then
+    mkdir -p "${datadir}"
+  fi
+
   if [ -z ${url} ]; then
     ekko "First param must be a URL, but the first param was empty."
     exit 6
@@ -26,7 +30,7 @@ init () {
 
 
 main () {
-  cd /tmp
+  cd "${datadir}"
   while :; do
 
     # Attempt to download the stream.
