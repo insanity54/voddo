@@ -2,7 +2,7 @@
 
 ## CONFIG
 init_delay=10          # The starting retry delay (in seconds.)
-max_delay=$((60*1))   # The maximum amount of time to delay beteween checking for a live stream.
+max_delay=$((60*10))   # The maximum amount of time to delay beteween checking for a live stream.
 delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream.
 datadir="~/.local/futureporn"
 
