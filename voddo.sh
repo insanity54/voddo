@@ -2,7 +2,7 @@
 
 ## CONFIG
 init_delay=10          # The starting retry delay (in seconds.)
-max_delay=$((60*10))   # The maximum amount of time to delay beteween checking for a live stream.
+max_delay=$((60*1))   # The maximum amount of time to delay beteween checking for a live stream.
 delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream.
 datadir="~/.local/futureporn"
 
@@ -40,13 +40,16 @@ main () {
     # This would suggest that the streamer ended their stream.
     # In the case that the stream ending was temporary (so the streamer could fix a technical problem),
     # we want youtube-dl to resume quickly afterwards to catch the stream as it continues.
-    if [[ $? -eq 0 ]]; then let delay=init_delay; fi
+    if [ $? -eq 0 ]; then
+      delay=$init_delay;
+    fi
 
     # Slowly increase the delay time between retries.
     # This is done to be polite to the streaming platform.
     # We wait longer and longer between tries, eventually maxing out at ${max_delay} seconds
-    if [[ delay -ge max_delay ]]; then let delay=max_delay
-      else let delay=delay*2
+    if [ $(($delay*2)) -ge $max_delay ];
+      then delay=$max_delay
+      else delay=$(($delay*2));
     fi
 
     ekko "Retrying in ${delay} seconds..."
