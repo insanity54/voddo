@@ -2,9 +2,11 @@
   "name": "voddo",
   "version": "0.0.1",
   "description": "Persistent Stream Downloader using youtube-dl",
-  "main": "voddo.sh",
+  "main": "voddo.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "supervisor -n -w . voddo.js",
+    "watch:test": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -20,5 +22,11 @@
   },
   "homepage": "https://gitlab.com/insanity54/voddo#readme",
   "dependencies": {
+    "debug": "^4.3.1",
+    "rxjs": "^6.6.3",
+    "youtube-dl-wrap": "^2.0.0"
+  },
+  "devDependencies": {
+    "supervisor": "^0.12.0"
   }
 }
