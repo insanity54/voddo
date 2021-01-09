@@ -12,7 +12,7 @@ const path = require('path');
 const debug = require('debug')('voddo');
 
 
-const offlineRegex = /ERROR:\s+\S+\s+is offline/;
+const offlineRegex = /ERROR:.*offline/;
 const destinationRegex = /Destination:\s+(.+\.\S+)/;
 const fakePath = '/tmp/projektmalady 2021-01-01 fakevid.mp4';
 const isWatching = true;
@@ -24,6 +24,8 @@ const watch = (url, defaultDelay, maxDelay) => {
   const ee = new EventEmitter();
 
   const download = (url) => {
+    // YoutubeDlWrap is kinda weird in that it returns an error
+    // rather than throwing the error or rejecting the promise.
     return youtubedl.execPromise([url, '-f', 'best']);
   };
 
@@ -38,7 +40,18 @@ const watch = (url, defaultDelay, maxDelay) => {
   let _watchP = (async () => {
     while (isWatching) {
       await sleepFor(delay);
-      let res = await download(url);
+      let res;
+      try {
+        res = await download(url);
+
+      } catch (e) {
+        if (typeof e.message === 'undefined' || !offlineRegex.test(e.message)) {
+          console.error('throwing due to unhandled error')
+          throw e;
+        } else {
+          console.log(`room is offline but we will try again in ${delay}ms`);
+        }
+      }
       debug(`response:${res}, delay:${delay}`);
       if (typeof res === 'string') {
         ee.emit('complete', res);
