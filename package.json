@@ -1,6 +1,6 @@
 {
   "name": "voddo",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Persistent Stream Downloader using youtube-dl",
   "main": "voddo.js",
   "scripts": {
