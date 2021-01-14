@@ -1,6 +1,6 @@
 {
   "name": "voddo",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Persistent Stream Downloader using youtube-dl",
   "main": "voddo.js",
   "scripts": {
@@ -28,5 +28,10 @@
   },
   "devDependencies": {
     "supervisor": "^0.12.0"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "jest-extended"
+    ]
   }
 }
