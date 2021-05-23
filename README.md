@@ -1,39 +1,19 @@
-# Tivomouse
+# Voddo
 
 A bash script to help you record a live stream. Great for the times when you just can't make it!
 
 ## Dependencies
 
   * bash
-  * jq
   * youtube-dl
 
 ## Setup
 
-Add your favorite streams to `voddo.json`.
-
-```json
-[{
-    "name": "mouse",
-    "url": "https://twitch.tv/ironmouse"
-  },
-  {
-    "name": "tvmel",
-    "url": "https://twitch.tv/projektmelody"
-  },
-  {
-    "name": "cbmel",
-    "url": "https://chaturbate.com/projektmelody"
-  }
-]
-```
-
-The name property is used in the command line incantation to refer to a stream. The url property is passed to youtube-dl.
 
 ## Usage
 
 ```
-$ ./voddo mouse
+$ ./voddo https://twitch.tv/ironmouse
 [Fri 06 Nov 2020 08:10:12 PM PST] - Attempting to download mouse's stream at URL https://twitch.tv/ironmouse... Press Ctrl+C to quit.
 [twitch:stream] ironmouse: Downloading stream GraphQL
 [twitch:stream] ironmouse: Downloading access token JSON
@@ -43,7 +23,7 @@ $ ./voddo mouse
 ```
 
 ```
-$ ./voddo cbmel
+$ ./voddo https://chaturbate.com/projektmelody
 [Fri 06 Nov 2020 08:15:38 PM PST] - Attempting to download cbmel's stream at URL https://chaturbate.com/projektmelody... Press Ctrl+C to quit.
 [Chaturbate] projektmelody: Downloading webpage
 ERROR: Room is currently offline
