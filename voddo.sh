@@ -29,7 +29,7 @@ main () {
 
     # Attempt to download the stream.
     # We use the name parameter sent to this script to look up the stream url in `ref.json`.
-    youtube-dl -f best "${url}"
+    youtube-dl -f worst "${url}"
 
     # Reset the delay time if youtube-dl exited with 0 error code
     # This would suggest that the streamer ended their stream.

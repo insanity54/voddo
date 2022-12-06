@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+
+const Voddo = require('./lib/voddo')
+const yargs = require('yargs/yargs')
+const { hideBin } = require('yargs/helpers')
+const argv = yargs(hideBin(process.argv)).argv
+
+
+
+yargs(hideBin(process.argv))
+  .command('download', 'persistently download streams from a channel', (yargs) => {
+    return yargs
+  }, (argv) => {
+    const voddo = new Voddo({ 
+      url: argv.url, 
+      format: argv.format, 
+      cwd: argv.cwd,
+      mqRoutingKey: argv.mqRoutingKey,
+      mqUrl: argv.mqUrl,
+    })
+    voddo.initMq()
+    voddo.observe()
+  })
+  .option('url', {
+  	alias: 'u',
+  	type: 'string',
+  	description: 'url of the channel to download',
+  	example: '--url https://twitch.tv/nihmune',
+  	required: true
+  })
+  .option('format', {
+    alias: 'f',
+    type: 'string',
+    description: 'Video format',
+    example: '--format best',
+    required: false
+  })
+  .option('cwd', {
+  	alias: 'c',
+  	type: 'string',
+  	description: 'Current working directory where ytdl will be spawned',
+  	example: '--cwd /tmp',
+  	required: true
+  })
+  .option('mqExchange', {
+    alias: 'e',
+    type: 'string',
+    description: 'exchange name sent to RabbitMQ server',
+    required: false
+  })
+  .option('mqRoutingKey', {
+    alias: 'r',
+    type: 'string',
+    description: 'routing_key sent to the RabbitMQ server',
+    required: false
+  })
+  .option('mqUrl', {
+    alias: 'm',
+    type: 'string',
+    description: 'url of the RabbitMQ server to connect with',
+    required: false
+  })
+  .demandCommand(1)
+  .parse()
