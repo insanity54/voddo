@@ -25,16 +25,24 @@ init () {
 
 
 main () {
+  
   while :; do
 
-    # Attempt to download the stream.
-    # We use the name parameter sent to this script to look up the stream url in `ref.json`.
-    youtube-dl -f best "${url}"
+    datestamp=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+    ffmpeg \
+      -headers "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0" \
+      -i "${url}" \
+      -c:v copy \
+      -c:a copy \
+      -movflags faststart \
+      -y \
+      -f mpegts \
+      "./${datestamp}.ts"
 
-    # Reset the delay time if youtube-dl exited with 0 error code
+    # Reset the delay time if yt-dlp exited with 0 error code
     # This would suggest that the streamer ended their stream.
     # In the case that the stream ending was temporary (so the streamer could fix a technical problem),
-    # we want youtube-dl to resume quickly afterwards to catch the stream as it continues.
+    # we want yt-dlp to resume quickly afterwards to catch the stream as it continues.
     if [ $? -eq 0 ]; then
       delay=$init_delay;
     fi
