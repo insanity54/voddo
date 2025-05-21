@@ -14,7 +14,7 @@ A bash script to help you record a live stream. Great for the times when you jus
 ## Usage
 
 ```
-$ ./voddo $(yt-dlp -g 'https://twitch.tv/ironmouse')
+$ ./voddo.sh 'https://twitch.tv/ironmouse'
 [Fri 06 Nov 2020 08:10:12 PM PST] - Attempting to download stream... Press Ctrl+C to quit.
 [twitch:stream] ironmouse: Downloading stream GraphQL
 [twitch:stream] ironmouse: Downloading access token JSON
@@ -23,11 +23,5 @@ $ ./voddo $(yt-dlp -g 'https://twitch.tv/ironmouse')
 (...)
 ```
 
-```
-$ ./voddo $(yt-dlp -g 'https://chaturbate.com/projektmelody')
-[Fri 06 Nov 2020 08:15:38 PM PST] - Attempting to download stream ... Press Ctrl+C to quit.
-[Chaturbate] projektmelody: Downloading webpage
-ERROR: Room is currently offline
-[Fri 06 Nov 2020 08:15:39 PM PST] - Retrying in 20 seconds...
-(...)
-```
+You can use voddo on any streaming site [supported by yt-dlp](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md).
+

@@ -15,10 +15,23 @@ ekko() {
 
 init() {
 
-  if [ -z ${channel_url} ]; then
+  mkdir -p ./recordings
+
+  trap 'ekko "Interrupted by user. Exiting..."; exit 0' INT
+
+  if [ -z "${channel_url}" ]; then
     ekko "First param must be a URL, but the first param was empty."
     exit 6
   fi
+
+  command -v yt-dlp >/dev/null 2>&1 || {
+    ekko "yt-dlp not found."
+    exit 1
+  }
+  command -v ffmpeg >/dev/null 2>&1 || {
+    ekko "ffmpeg not found."
+    exit 1
+  }
 
   ekko "Attempting to download stream at URL ${channel_url}... Press Ctrl+C to quit."
 }
@@ -27,15 +40,14 @@ main() {
 
   while :; do
 
-    playlist_url=$(yt-dlp -g "${channel_url}")
-    if [ $? -ne 0 ]; then
+    if ! playlist_url="$(yt-dlp -g "${channel_url}" 2>/dev/null)"; then
       ekko "yt-dlp failed"
       playlist_url=""
     fi
 
-    if [ -n "$playlist_url" ]; then
+    if [ -n "${playlist_url}" ]; then
 
-      datestamp=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
+      datestamp="$(date -u +"%Y-%m-%dT%H-%M-%SZ")"
       ffmpeg \
         -headers "User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101 Firefox/105.0" \
         -i "${playlist_url}" \
@@ -51,7 +63,7 @@ main() {
       # In the case that the stream ending was temporary (so the streamer could fix a technical problem),
       # we want yt-dlp to resume quickly afterwards to catch the stream as it continues.
       if [ $? -eq 0 ]; then
-        delay=$init_delay
+        delay="$init_delay"
       fi
 
     fi
@@ -60,7 +72,7 @@ main() {
     # This is done to be polite to the streaming platform.
     # We wait longer and longer between tries, eventually maxing out at ${max_delay} seconds
     if [ $(($delay * 2)) -ge $max_delay ]; then
-      delay=$max_delay
+      delay="${max_delay}"
     else
       delay=$(($delay * 2))
     fi
