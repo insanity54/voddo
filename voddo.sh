@@ -4,13 +4,14 @@
 init_delay=10          # The starting retry delay (in seconds.)
 max_delay=$((60 * 10)) # The maximum amount of time to delay beteween checking for a live stream.
 delay="${init_delay}"  # Ongoing delay counter. Doubles itself if there is no live stream.
+check_interval=1       # How often to check for signals during interruptable_sleep (in seconds)
 
 ## VARIABLES
 channel_url="${1}"
 
 ## FUNCTIONS
 ekko() {
-  echo "[$(date)] - ${1}"
+  printf "[%s] - %s\n" "$(date)" "$1"
 }
 
 init() {
@@ -34,6 +35,22 @@ init() {
   }
 
   ekko "Attempting to download stream at URL ${channel_url}... Press Ctrl+C to quit."
+}
+
+interruptible_sleep() {
+  target="$1"
+  elapsed=0
+  while [ "$elapsed" -lt "$target" ]; do
+    sleep "$check_interval"
+    elapsed=$((elapsed + check_interval))
+
+    if [ -f "./.reset-retry" ]; then
+      ekko "Reset signal detected during delay. Resetting retry delay to ${init_delay}s."
+      delay="$init_delay"
+      rm -f "./.reset-retry"
+      break
+    fi
+  done
 }
 
 main() {
@@ -68,17 +85,18 @@ main() {
 
     fi
 
+
     # Slowly increase the delay time between retries.
     # This is done to be polite to the streaming platform.
     # We wait longer and longer between tries, eventually maxing out at ${max_delay} seconds
-    if [ $(($delay * 2)) -ge $max_delay ]; then
+    if [ $((delay * 2)) -ge "$max_delay" ]; then
       delay="${max_delay}"
     else
       delay=$(($delay * 2))
     fi
 
     ekko "Retrying in ${delay} seconds..."
-    sleep "${delay}"
+    interruptible_sleep "${delay}"
 
   done
 }
